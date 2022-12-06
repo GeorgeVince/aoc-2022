@@ -1,49 +1,47 @@
-with open("./input/day-04.txt", 'r') as f:
+from dataclasses import dataclass
+
+with open("./input/day-04.txt", "r") as f:
     contents = [x.strip() for x in f.readlines()]
 
-total = 0
+
+@dataclass
+class Elf:
+    lower: int
+    upper: int
+    
+    def __post_init__(self):
+        self.lower = int(self.lower)
+        self.upper = int(self.upper)
+
+pairs = []
 for row in contents:
     elf_1, elf_2 = row.split(",")
-    e_1_lower, e_1_higher = elf_1.split("-")
-    e_2_lower, e_2_higher = elf_2.split("-")
+    pairs.append([Elf(*elf_1.split("-")), Elf(*elf_2.split("-"))])
 
-    e_1_lower = int(e_1_lower)
-    e_1_higher = int(e_1_higher)
-    e_2_lower = int(e_2_lower)
-    e_2_higher = int(e_2_higher)
-
-    if e_1_lower >= e_2_lower and e_1_higher <= e_2_higher:
-        total +=1
+total = 0
+for row in pairs:
+    if row[0].lower >= row[1].lower and row[0].upper <= row[1].upper:
+        total += 1
         continue
-    if e_1_lower <= e_2_lower and e_1_higher >= e_2_higher:
-        total +=1
+    if row[0].lower <= row[1].lower and row[0].upper >= row[1].upper:
+        total += 1
         continue
 print(total)
 
 total = 0
-for row in contents:
-    elf_1, elf_2 = row.split(",")
-    e_1_lower, e_1_higher = elf_1.split("-")
-    e_2_lower, e_2_higher = elf_2.split("-")
-
-    e_1_lower = int(e_1_lower)
-    e_1_higher = int(e_1_higher)
-    e_2_lower = int(e_2_lower)
-    e_2_higher = int(e_2_higher)
-
-    if e_1_lower <= e_2_lower:
-        while e_1_lower <= e_1_higher:
-            if e_1_lower >= e_2_lower and e_1_lower <= e_2_higher:
+for row in pairs:
+    if row[0].lower <= row[1].lower:
+        while row[0].lower <= row[0].upper:
+            if row[0].lower >= row[1].lower and row[0].lower <= row[1].upper:
                 total += 1
                 break
-            e_1_lower += 1
+            row[0].lower += 1
         continue
-    
-    if e_2_lower <= e_2_lower:
-        while e_2_lower <= e_2_higher:
-            if e_2_lower >= e_1_lower and e_2_lower <= e_1_higher:
+
+    if row[1].lower <= row[1].lower:
+        while row[1].lower <= row[1].upper:
+            if row[1].lower >= row[0].lower and row[1].lower <= row[0].upper:
                 total += 1
                 break
-            e_2_lower += 1
-    
+            row[1].lower += 1
 print(total)
