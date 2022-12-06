@@ -22,7 +22,6 @@ print(total)
 
 total = 0
 for row in contents:
-    print(row, total)
     elf_1, elf_2 = row.split(",")
     e_1_lower, e_1_higher = elf_1.split("-")
     e_2_lower, e_2_higher = elf_2.split("-")
@@ -36,14 +35,15 @@ for row in contents:
         while e_1_lower <= e_1_higher:
             if e_1_lower >= e_2_lower and e_1_lower <= e_2_higher:
                 total += 1
+                break
             e_1_lower += 1
         continue
     
-    if e_2_lower <= e_1_lower:
+    if e_2_lower <= e_2_lower:
         while e_2_lower <= e_2_higher:
-            if e_2_lower >= e_1_lower and e_1_lower <= e_1_higher:
+            if e_2_lower >= e_1_lower and e_2_lower <= e_1_higher:
                 total += 1
+                break
             e_2_lower += 1
-        continue
     
 print(total)
